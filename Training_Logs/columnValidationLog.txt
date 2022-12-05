@@ -1,0 +1,20 @@
+2022-12-02/09:58:36		Error Occured:: 'str' object has no attribute 'write'
+2022-12-02/10:07:09		column length validation is completed
+2022-12-02/10:16:54		column length validation is completed
+2022-12-02/10:17:55		column length validation is completed
+2022-12-02/10:33:13		column length validation is completed
+2022-12-02/10:36:05		column length validation is completed
+2022-12-02/10:37:11		column length validation is completed
+2022-12-02/10:38:15		column length validation is completed
+2022-12-02/10:38:41		column length validation is completed
+2022-12-02/10:39:02		column length validation is completed
+2022-12-02/10:41:10		column length validation is completed
+2022-12-02/10:43:45		column length validation is completed
+2022-12-02/10:44:33		column length validation is completed
+2022-12-02/10:45:43		column length validation is completed
+2022-12-02/10:50:05		column length validation is completed
+2022-12-02/10:51:51		column length validation is completed
+2022-12-02/11:16:39		column length validation is completed
+2022-12-02/11:17:23		column length validation is completed
+2022-12-02/17:06:26		column length validation is completed
+2022-12-04/14:41:36		column length validation is completed

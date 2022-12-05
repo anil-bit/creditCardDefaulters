@@ -1,5 +1,7 @@
 from Training_raw_data_validation.raw_data_validation import raw_data_validation
+from DataTransform_Training.DataTransformation import datatransform
 from application_logging.logger import App_Logger
+from DataTypeValidation_Insertion_Training.DataTypeValidation import dboperation
 import os
 
 '''
@@ -15,11 +17,15 @@ in this section we do is
 
 
 class train_validation:
-    def __init__(self):
-        self.raw_data = raw_data_validation()
+    def __init__(self,path):
+
+        self.raw_data = raw_data_validation(path)
         self.logger = App_Logger()
         self.cwd = os.getcwd()
         self.file_object = open(self.cwd+'Training_Main_Log.txt', 'a+')
+        self.datatransform = datatransform()
+        self.dboperation = dboperation()
+
 
 
 
@@ -29,7 +35,27 @@ class train_validation:
         LengthOfDateStampInFile, LengthOfTimeStampInFile, column_names, noofcolumns = self.raw_data.valuesfromscema()
         #getting the regex to validate the name
         regex = self.raw_data.manualregexcreation()
-        #validating file name of prediction file
+        #validating file name of prediction files
+        self.raw_data.validationFileNameRaw(regex,LengthOfDateStampInFile,LengthOfTimeStampInFile)
+        #validating column length in file
+        self.raw_data.checking_column_length(noofcolumns)
+        #validating if any column has all missing value
+        self.raw_data.column_all_missing()
+        self.logger.log(self.file_object,"Raw Data Validation Complete!!")
+        self.logger.log(self.file_object,"Starting Data Transforamtion!!")
+        #replacing the empty value with null value
+        self.datatransform.replacemissingwithnulls()
+        self.logger.log(self.file_object, "DataTransformation Completed!!!")
+        self.logger.log(self.file_object,"Creating Training_Database and tables on the basis of given schema!!!")
+        #create database with given name, if present open the connection! Create table with columns given in schema
+        self.dboperation.createtabledb("Training",column_names)
+        self.log_writer.log(self.file_object, "Insertion in Table completed!!!")
+        self.log_writer.log(self.file_object, "Deleting Good Data Folder!!!")
+        #import csv files into the table
+
+
+
+
 
 
 
