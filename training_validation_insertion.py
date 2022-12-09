@@ -30,28 +30,47 @@ class train_validation:
 
 
     def train_validation(self):
-        self.logger.log(self.file_object,"Start of Validation on files for Training")
-        #extracting values from schema file
-        LengthOfDateStampInFile, LengthOfTimeStampInFile, column_names, noofcolumns = self.raw_data.valuesfromscema()
-        #getting the regex to validate the name
-        regex = self.raw_data.manualregexcreation()
-        #validating file name of prediction files
-        self.raw_data.validationFileNameRaw(regex,LengthOfDateStampInFile,LengthOfTimeStampInFile)
-        #validating column length in file
-        self.raw_data.checking_column_length(noofcolumns)
-        #validating if any column has all missing value
-        self.raw_data.column_all_missing()
-        self.logger.log(self.file_object,"Raw Data Validation Complete!!")
-        self.logger.log(self.file_object,"Starting Data Transforamtion!!")
-        #replacing the empty value with null value
-        self.datatransform.replacemissingwithnulls()
-        self.logger.log(self.file_object, "DataTransformation Completed!!!")
-        self.logger.log(self.file_object,"Creating Training_Database and tables on the basis of given schema!!!")
-        #create database with given name, if present open the connection! Create table with columns given in schema
-        self.dboperation.createtabledb("Training",column_names)
-        self.log_writer.log(self.file_object, "Insertion in Table completed!!!")
-        self.log_writer.log(self.file_object, "Deleting Good Data Folder!!!")
-        #import csv files into the table
+        try:
+            self.logger.log(self.file_object,"Start of Validation on files for Training")
+            #extracting values from schema file
+            LengthOfDateStampInFile, LengthOfTimeStampInFile, column_names, noofcolumns = self.raw_data.valuesfromscema()
+            #getting the regex to validate the name
+            regex = self.raw_data.manualregexcreation()
+            #validating file name of prediction files
+            self.raw_data.validationFileNameRaw(regex,LengthOfDateStampInFile,LengthOfTimeStampInFile)
+            #validating column length in file
+            self.raw_data.checking_column_length(noofcolumns)
+            #validating if any column has all missing value
+            self.raw_data.column_all_missing()
+            self.logger.log(self.file_object,"Raw Data Validation Complete!!")
+            self.logger.log(self.file_object,"Starting Data Transforamtion!!")
+            #replacing the empty value with null value
+            self.datatransform.replacemissingwithnulls()
+            self.logger.log(self.file_object, "DataTransformation Completed!!!")
+            self.logger.log(self.file_object,"Creating Training_Database and tables on the basis of given schema!!!")
+            #create database with given name, if present open the connection! Create table with columns given in schema
+            self.dboperation.createtabledb("Training",column_names)
+            self.logger.log(self.file_object, "Insertion in Table completed!!!")
+            self.logger.log(self.file_object, "Deleting Good Data Folder!!!")
+            #import csv files into the table
+            self.dboperation.insertintotablegooddata("Training")
+            self.logger.log(self.file_object,"Insertion in Table completed!!!")
+            self.logger.log(self.file_object, "Deleting Good Data Folder!!!")
+            #delete the good data folder after loading files in database
+            self.raw_data.deleteExistingGoodDataTrainingFolder()
+            self.logger.log(self.file_object,"deleting good data folder completed")
+            self.logger.log(self.file_object,"Moving bad files to Archive and deleting Bad_Data folder!!!")
+            # Move the bad files to archive folder
+            self.raw_data.movebadfilestoarchive()
+            self.logger.log(self.file_object,"badfiles move to archive!! bad files deleted!!")
+            self.logger.log(self.file_object,"validation operation completed")
+            self.logger.log(self.file_object,"extracting csv file from table")
+            #export csv file from db
+            self.dboperation.selectingdatafromtablesasscv("Training")
+            self.file_object.close()
+
+        except Exception as e:
+            raise e
 
 
 

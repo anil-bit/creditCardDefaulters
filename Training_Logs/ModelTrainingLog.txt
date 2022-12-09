@@ -1,0 +1,26 @@
+2022-12-09/15:11:01		Start of Training
+2022-12-09/15:11:01		Entered the get_data method of the Data_Getter class
+2022-12-09/15:11:01		data loaded suceessfully and has extracted
+2022-12-09/16:46:00		Start of Training
+2022-12-09/16:46:00		Entered the get_data method of the Data_Getter class
+2022-12-09/16:46:01		data loaded suceessfully and has extracted
+2022-12-09/16:46:01		Exception occured in separate_label_feature method of the Preprocessor class. Exception message:  drop() got an unexpected keyword argument 'label'
+2022-12-09/16:46:01		Label Separation Unsuccessful. Exited the separate_label_feature method of the Preprocessor class
+2022-12-09/16:52:41		Start of Training
+2022-12-09/16:52:41		Entered the get_data method of the Data_Getter class
+2022-12-09/16:52:41		data loaded suceessfully and has extracted
+2022-12-09/16:52:41		Entered the separate_label_feature method of the Preprocessor class
+2022-12-09/16:52:41		Label Separation Successful. Exited the separate_label_feature method of the Preprocessor class
+2022-12-09/17:41:01		Start of Training
+2022-12-09/17:41:01		Entered the get_data method of the Data_Getter class
+2022-12-09/17:41:02		data loaded suceessfully and has extracted
+2022-12-09/17:41:02		Entered the separate_label_feature method of the Preprocessor class
+2022-12-09/17:41:02		Label Separation Successful. Exited the separate_label_feature method of the Preprocessor class
+2022-12-09/17:41:02		Exception occured in is_null_present method of the Preprocessor class. Exception message:  [Errno 2] No such file or directory: 'preprocessing_data/null_values.csv'
+2022-12-09/17:41:02		Finding missing values failed. Exited the is_null_present method of the Preprocessor class
+2022-12-09/17:43:50		Start of Training
+2022-12-09/17:43:50		Entered the get_data method of the Data_Getter class
+2022-12-09/17:43:50		data loaded suceessfully and has extracted
+2022-12-09/17:43:50		Entered the separate_label_feature method of the Preprocessor class
+2022-12-09/17:43:50		Label Separation Successful. Exited the separate_label_feature method of the Preprocessor class
+2022-12-09/17:43:50		Finding missing values is a success.Data written to the null values file. Exited the is_null_present method of the Preprocessor class

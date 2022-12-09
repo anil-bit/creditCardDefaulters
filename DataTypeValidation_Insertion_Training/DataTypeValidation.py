@@ -1,10 +1,15 @@
+import csv
+import os.path
 import sqlite3
 from application_logging.logger import App_Logger
-
+from os import listdir
+import shutil
 class dboperation:
     def __init__(self):
         self.path = "Training_Database/"
         self.logger = App_Logger()
+        self.goodFilePath = "Training_Raw_files_validated/Good_Raw"
+        self.badFilePath = "Training_Raw_files_validated/Bad_Raw"
     def databaseconnection(self,DatabaseName):
         '''
         method:databaseconnection
@@ -84,11 +89,72 @@ class dboperation:
             file.close()
             raise e
 
-    def insertintotablegooddata(self):
+    def insertintotablegooddata(self,Database):
         '''
         method:insertintotablegooddata
         purpose:insert the data into database table
         '''
+        conn = self.databaseconnection(Database)
+        onlyfiles = [f for f in listdir(self.goodFilePath)]
+        log_file = open("Training_Logs/DbInsertLog.txt", 'a+')
+
+        for file in onlyfiles:
+            try:
+                with open(self.goodFilePath+"/"+file,"r") as f:
+                    next(f)
+                    reader = csv.reader(f,delimiter="\n")
+                    for line in enumerate(reader):
+                        for list_ in line[1]:
+                            try:
+                                conn.execute("INSERT INTO Good_Raw_Data values ({values})".format(values=(list_)))
+                                self.logger.log(log_file," %s: File loaded successfully!!" % file)
+                                conn.commit()
+                            except Exception as e:
+                                raise e
+
+            except Exception as e:
+
+                conn.rollback()
+                self.logger.log(log_file,"Error while creating table: %s " % e)
+                shutil.move(self.goodFilePath+'/' + file, self.badFilePath)
+                self.logger.log(log_file, "File Moved Successfully %s" % file)
+                log_file.close()
+                conn.close()
+
+        conn.close()
+        log_file.close()
+
+    def selectingdatafromtablesasscv(self,Database):
+        '''
+        method:  selectingdatafromtablesasscv
+        purpose: certe a single table that consistes of all the data in database and save it in local
+        '''
+        self.filefromdb = 'Training_FileFromDB/'
+        self.filename = 'InputFile.csv'
+        log_file = open("Training_Logs/ExportToCsv.txt", 'a+')
+        try:
+            conn = self.databaseconnection(Database)
+            sqlselect = "SELECT * FROM Good_Raw_Data"
+            cursor = conn.cursor()
+            cursor.execute(sqlselect)
+            results = cursor.fetchall()
+            #print(cursor.description)
+            headers = [i[0] for i in cursor.description]
+            if not os.path.isdir(self.filefromdb):
+                os.makedirs(self.filefromdb)
+            csvFile = csv.writer(open(self.filefromdb + self.filename, 'w', newline=''),delimiter=',', lineterminator='\r\n',quoting=csv.QUOTE_ALL, escapechar='\\')
+            #add headers and data into csv files
+            csvFile.writerow(headers)
+            csvFile.writerows(results)
+
+            self.logger.log(log_file, "File exported successfully!!!")
+            log_file.close()
+
+        except Exception as e:
+            self.logger.log(log_file, "File exporting failed. Error : %s" %e)
+            log_file.close()
+
+
 
 
 
